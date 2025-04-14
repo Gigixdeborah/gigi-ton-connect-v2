@@ -1,3 +1,5 @@
+// pages/index.tsx
+
 import Head from "next/head";
 import { useEffect } from "react";
 
@@ -9,7 +11,7 @@ export default function Home() {
 
     tonconnectScript.onload = () => {
       if (window && "TonConnectSDK" in window) {
-        const connector = new window.TonConnectSDK.TonConnect({
+        const connector = new (window as any).TonConnectSDK.TonConnect({
           manifestUrl: "https://gigi-ton-connect-v2.onrender.com/tonconnect-manifest.json"
         });
 
@@ -36,12 +38,14 @@ export default function Home() {
 
       <main className="min-h-screen flex flex-col items-center justify-center bg-black text-white px-4">
         <h1 className="text-3xl sm:text-4xl font-bold mb-8 text-center">
-          Connect Your TON Wallet
+          Connect Your Wallet
         </h1>
-        <p className="text-center">
-          Please open this in your Telegram Wallet browser to connect automatically.
+
+        <p className="text-lg text-center max-w-xl">
+          This page automatically tries to connect your TON wallet using the Telegram interface. Please open with your Telegram wallet or scan the QR code.
         </p>
       </main>
     </>
   );
 }
+
