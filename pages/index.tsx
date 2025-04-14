@@ -9,16 +9,20 @@ export default function Home() {
     tonconnectScript.async = true;
 
     tonconnectScript.onload = () => {
-      const connector = new window.TonConnectSDK.TonConnect({
-        manifestUrl: "https://gigi-ton-connect-v2.onrender.com/tonconnect-manifest.json"
-      });
+      // Ensure SDK is loaded before accessing it
+      if (window && "TonConnect" in window) {
+        const connector = new window.TonConnect({
+          manifestUrl: "https://gigi-ton-connect-v2.onrender.com/tonconnect-manifest.json"
+        });
 
-      // Automatically request wallet connection if in Telegram environment
-      connector.restoreConnection().then(() => {
-        if (!connector.connected) {
-          connector.connect({ jsBridgeKey: "ton_addr" }); // required for Telegram
-        }
-      });
+        connector.restoreConnection().then(() => {
+          if (!connector.connected) {
+            connector.connect({ jsBridgeKey: "ton_addr" });
+          }
+        });
+      } else {
+        console.error("❌ TonConnect not found in window. SDK failed to load.");
+      }
     };
 
     document.body.appendChild(tonconnectScript);
@@ -37,9 +41,10 @@ export default function Home() {
           Connect Your Wallet
         </h1>
         <p className="text-center text-gray-400">
-          If you're using Telegram Wallet, the connection request should pop up shortly.
+          If you're using Telegram Wallet, a connection request should appear.
         </p>
       </main>
     </>
   );
 }
+
