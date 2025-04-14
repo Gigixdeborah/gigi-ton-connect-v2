@@ -21,37 +21,32 @@ export default function Home() {
 
       <main className="min-h-screen flex flex-col items-center justify-center bg-black text-white px-4">
         <h1 className="text-3xl sm:text-4xl font-bold mb-8 text-center">
-          Connect Your Wallet
+          🔗 Connect Your Wallet
         </h1>
 
-        <div className="flex flex-col gap-4 items-center">
-          <TonConnectButton />
+        <div className="flex flex-col space-y-4 w-full max-w-xs">
+          {/* TON Connect Button */}
+          <TonConnectButton className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded text-center" />
 
+          {/* EVM Wallet Connect */}
           <button
             onClick={handleEvmConnect}
-            className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-xl transition-all"
+            className="bg-purple-600 hover:bg-purple-700 text-white font-semibold py-2 px-4 rounded"
           >
-            Connect EVM Wallet
+            🟣 Connect MetaMask
           </button>
 
+          {/* Solana Wallet Connect */}
           <button
             onClick={handleSolanaConnect}
-            className="bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-6 rounded-xl transition-all"
+            className="bg-yellow-500 hover:bg-yellow-600 text-white font-semibold py-2 px-4 rounded"
           >
-            Connect Solana Wallet
+            🟡 Connect Phantom Wallet
           </button>
         </div>
 
-        <p className="mt-12 text-sm text-gray-400">
-          Powered by GigiP2Bot •{" "}
-          <a
-            href="https://gigi-ton-connect-r6ygrprjb-gigi-labs.vercel.app"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="underline hover:text-white"
-          >
-            Live App
-          </a>
+        <p className="text-gray-400 mt-6 text-sm text-center">
+          Powered by <b>Gigi Labs</b> — Secure wallet integration for Web3.
         </p>
       </main>
     </>
