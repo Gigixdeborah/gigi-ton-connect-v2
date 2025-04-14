@@ -1,0 +1,10 @@
+{
+  "manifest_version": "1",
+  "name": "GigiP2Bot",
+  "description": "P2P crypto exchange bot powered by GigiP2Bot",
+  "url": "https://gigi-ton-connect-qzzfbo5of-gigi-labs.vercel.app",
+  "icon_url": "https://gigi-ton-connect-qzzfbo5of-gigi-labs.vercel.app/favicon.ico",
+  "bridge_url": "https://bridge.tonapi.io/bridge",
+  "terms_of_use_url": "https://example.com/terms",
+  "privacy_policy_url": "https://example.com/privacy"
+}
