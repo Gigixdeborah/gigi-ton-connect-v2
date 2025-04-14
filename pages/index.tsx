@@ -1,3 +1,4 @@
+import Head from "next/head";
 import { useEffect } from "react";
 
 export default function Home() {
@@ -7,8 +8,8 @@ export default function Home() {
     tonconnectScript.async = true;
 
     tonconnectScript.onload = () => {
-      if (window && "TonConnect" in window) {
-        const connector = window.TonConnect({
+      if (window && "TonConnectSDK" in window) {
+        const connector = new window.TonConnectSDK.TonConnect({
           manifestUrl: "https://gigi-ton-connect-v2.onrender.com/tonconnect-manifest.json"
         });
 
@@ -18,7 +19,7 @@ export default function Home() {
           }
         });
       } else {
-        console.error("❌ TonConnect not found in window. SDK failed to load.");
+        console.error("❌ TonConnectSDK not found in window. SDK failed to load.");
       }
     };
 
@@ -26,9 +27,21 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="text-white flex flex-col justify-center items-center min-h-screen bg-black">
-      <h1 className="text-3xl sm:text-4xl font-bold mb-6">Connect Your TON Wallet</h1>
-      <p className="mb-2">This page will trigger TON Connect when it loads.</p>
-    </div>
+    <>
+      <Head>
+        <title>Gigi Connect</title>
+        <meta name="description" content="Connect your wallets easily" />
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
+
+      <main className="min-h-screen flex flex-col items-center justify-center bg-black text-white px-4">
+        <h1 className="text-3xl sm:text-4xl font-bold mb-8 text-center">
+          Connect Your TON Wallet
+        </h1>
+        <p className="text-center">
+          Please open this in your Telegram Wallet browser to connect automatically.
+        </p>
+      </main>
+    </>
   );
 }
