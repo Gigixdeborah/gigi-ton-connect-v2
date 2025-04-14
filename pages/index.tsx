@@ -1,26 +1,25 @@
 // pages/index.tsx
 import Head from "next/head";
 import { useEffect } from "react";
-import { TonConnectUIProvider, TonConnectButton } from "@tonconnect/ui-react";
+import { TonConnectButton, TonConnectUIProvider } from "@tonconnect/ui-react";
 
 export default function Home() {
   useEffect(() => {
-    const tonconnectScript = document.createElement("script");
-    tonconnectScript.src = "https://unpkg.com/@tonconnect/sdk@latest/dist/tonconnect-sdk.min.js";
-    tonconnectScript.async = true;
-    tonconnectScript.onload = () => {
-      const connector = new window.TonConnectSDK.TonConnect({
+    async function initTon() {
+      const { TonConnect } = await import("@tonconnect/sdk");
+
+      const connector = new TonConnect({
         manifestUrl: "https://gigi-ton-connect-v2.onrender.com/tonconnect-manifest.json"
       });
 
-      // Automatically trigger connection for Telegram Wallet
-      connector.restoreConnection().then(() => {
-        if (!connector.connected) {
-          connector.connect({ jsBridgeKey: 'ton_addr' }).catch(console.error);
-        }
-      });
-    };
-    document.body.appendChild(tonconnectScript);
+      await connector.restoreConnection();
+
+      if (!connector.connected) {
+        await connector.connect({ jsBridgeKey: "ton_addr" }).catch(console.error);
+      }
+    }
+
+    initTon();
   }, []);
 
   return (
@@ -42,3 +41,4 @@ export default function Home() {
     </>
   );
 }
+
