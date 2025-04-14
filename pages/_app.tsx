@@ -1,5 +1,4 @@
 import '@tonconnect/ui-react';
-// pages/_app.tsx
 import '../styles/globals.css';
 import type { AppProps } from 'next/app';
 import dynamic from 'next/dynamic';
@@ -9,7 +8,7 @@ const TonConnectUIProvider = dynamic(
   { ssr: false }
 );
 
-const manifestUrl = 'https://gigi-ton-connect.vercel.app/tonconnect-manifest.json';
+const manifestUrl = 'https://gigi-ton-connect-v2.onrender.com/tonconnect-manifest.json';
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
