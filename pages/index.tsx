@@ -1,22 +1,8 @@
 // pages/index.tsx
 import Head from "next/head";
-import { TonConnectButton } from "@tonconnect/ui-react";
-import { useEffect } from "react";
-import { TonConnect } from "@tonconnect/sdk";
+import { TonConnectUIProvider, TonConnectButton } from "@tonconnect/ui-react";
 
 export default function Home() {
-  useEffect(() => {
-    const connector = new TonConnect({
-      manifestUrl: "https://gigi-ton-connect-v2.onrender.com/tonconnect-manifest.json"
-    });
-
-    connector.restoreConnection().then(() => {
-      if (!connector.connected) {
-        connector.connectWallet().catch(console.error);
-      }
-    });
-  }, []);
-
   const handleEvmConnect = () => {
     window.open("https://metamask.io/", "_blank");
   };
@@ -26,7 +12,9 @@ export default function Home() {
   };
 
   return (
-    <>
+    <TonConnectUIProvider
+      manifestUrl="https://gigi-ton-connect-v2.onrender.com/tonconnect-manifest.json"
+    >
       <Head>
         <title>Gigi Connect</title>
         <meta name="description" content="Connect your wallets easily" />
@@ -37,22 +25,28 @@ export default function Home() {
         <h1 className="text-3xl sm:text-4xl font-bold mb-8 text-center">
           Connect Your Wallet
         </h1>
-        <div className="space-y-4">
+
+        <div className="flex flex-col gap-4 items-center">
+          {/* TON Connect */}
           <TonConnectButton />
+
+          {/* MetaMask */}
           <button
-            className="bg-purple-600 px-4 py-2 rounded text-white"
             onClick={handleEvmConnect}
+            className="bg-purple-600 px-4 py-2 rounded-md"
           >
-            Connect MetaMask
+            Connect MetaMask (EVM)
           </button>
+
+          {/* Phantom */}
           <button
-            className="bg-blue-600 px-4 py-2 rounded text-white"
             onClick={handleSolanaConnect}
+            className="bg-pink-500 px-4 py-2 rounded-md"
           >
-            Connect Phantom
+            Connect Phantom (Solana)
           </button>
         </div>
       </main>
-    </>
+    </TonConnectUIProvider>
   );
 }
