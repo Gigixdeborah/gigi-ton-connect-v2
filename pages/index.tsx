@@ -1,8 +1,16 @@
 // pages/index.tsx
 import Head from "next/head";
 import { TonConnectButton } from "@tonconnect/ui-react";
+import { useEffect } from "react";
+import { TonConnect } from "@tonconnect/sdk";
 
 export default function Home() {
+  useEffect(() => {
+    const connector = new TonConnect({
+      manifestUrl: "https://gigi-ton-connect-v2.onrender.com/tonconnect-manifest.json"
+    });
+  }, []);
+
   const handleEvmConnect = () => {
     window.open("https://metamask.io/", "_blank");
   };
@@ -21,33 +29,19 @@ export default function Home() {
 
       <main className="min-h-screen flex flex-col items-center justify-center bg-black text-white px-4">
         <h1 className="text-3xl sm:text-4xl font-bold mb-8 text-center">
-          🔗 Connect Your Wallet
+          Connect Your Wallet
         </h1>
 
-        <div className="flex flex-col space-y-4 w-full max-w-xs">
-          {/* TON Connect Button */}
-          <TonConnectButton className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded text-center" />
+        <TonConnectButton />
 
-          {/* EVM Wallet Connect */}
-          <button
-            onClick={handleEvmConnect}
-            className="bg-purple-600 hover:bg-purple-700 text-white font-semibold py-2 px-4 rounded"
-          >
-            🟣 Connect MetaMask
+        <div className="mt-6 flex gap-4">
+          <button onClick={handleEvmConnect} className="bg-purple-600 px-4 py-2 rounded">
+            Connect MetaMask 🟣
           </button>
-
-          {/* Solana Wallet Connect */}
-          <button
-            onClick={handleSolanaConnect}
-            className="bg-yellow-500 hover:bg-yellow-600 text-white font-semibold py-2 px-4 rounded"
-          >
-            🟡 Connect Phantom Wallet
+          <button onClick={handleSolanaConnect} className="bg-yellow-600 px-4 py-2 rounded">
+            Connect Phantom 🟡
           </button>
         </div>
-
-        <p className="text-gray-400 mt-6 text-sm text-center">
-          Powered by <b>Gigi Labs</b> — Secure wallet integration for Web3.
-        </p>
       </main>
     </>
   );
