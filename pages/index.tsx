@@ -1,38 +1,28 @@
-// pages/index.tsx
 import Head from "next/head";
+import Script from "next/script";
 import { useEffect } from "react";
-import { TonConnectButton } from "@tonconnect/ui-react";
 
 export default function Home() {
   useEffect(() => {
-    async function initTon() {
-      const { TonConnect } = await import("@tonconnect/sdk");
+    const tonconnectScript = document.createElement("script");
+    tonconnectScript.src = "https://unpkg.com/@tonconnect/sdk@latest/dist/tonconnect-sdk.min.js";
+    tonconnectScript.async = true;
 
-      const connector = new TonConnect({
+    tonconnectScript.onload = () => {
+      const connector = new window.TonConnectSDK.TonConnect({
         manifestUrl: "https://gigi-ton-connect-v2.onrender.com/tonconnect-manifest.json"
       });
 
-      await connector.restoreConnection();
-
-      if (!connector.connected) {
-        try {
-          await connector.connect({ jsBridgeKey: "ton_addr" });
-        } catch (error) {
-          console.error("TON connect failed:", error);
+      // Automatically request wallet connection if in Telegram environment
+      connector.restoreConnection().then(() => {
+        if (!connector.connected) {
+          connector.connect({ jsBridgeKey: "ton_addr" }); // required for Telegram
         }
-      }
-    }
+      });
+    };
 
-    initTon();
+    document.body.appendChild(tonconnectScript);
   }, []);
-
-  const handleEvmConnect = () => {
-    window.open("https://metamask.io/", "_blank");
-  };
-
-  const handleSolanaConnect = () => {
-    window.open("https://phantom.app/", "_blank");
-  };
 
   return (
     <>
@@ -46,23 +36,9 @@ export default function Home() {
         <h1 className="text-3xl sm:text-4xl font-bold mb-8 text-center">
           Connect Your Wallet
         </h1>
-
-        <TonConnectButton />
-
-        <div className="mt-6 space-y-3 w-full max-w-sm">
-          <button
-            onClick={handleEvmConnect}
-            className="w-full bg-purple-700 hover:bg-purple-800 text-white font-semibold py-2 px-4 rounded"
-          >
-            🔗 Connect MetaMask (EVM)
-          </button>
-          <button
-            onClick={handleSolanaConnect}
-            className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 px-4 rounded"
-          >
-            🔗 Connect Phantom (Solana)
-          </button>
-        </div>
+        <p className="text-center text-gray-400">
+          If you're using Telegram Wallet, the connection request should pop up shortly.
+        </p>
       </main>
     </>
   );
