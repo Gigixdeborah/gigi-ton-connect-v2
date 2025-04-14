@@ -2,9 +2,9 @@
   "manifest_version": "1",
   "name": "GigiP2Bot",
   "description": "P2P crypto exchange bot powered by GigiP2Bot",
-  "url": "https://gigi-ton-connect-qzzfbo5of-gigi-labs.vercel.app",
-  "icon_url": "https://gigi-ton-connect-qzzfbo5of-gigi-labs.vercel.app/favicon.ico",
+  "url": "https://gigi-ton-connect-v2.onrender.com",
+  "icon_url": "https://gigi-ton-connect-v2.onrender.com/favicon.ico",
   "bridge_url": "https://bridge.tonapi.io/bridge",
-  "terms_of_use_url": "https://example.com/terms",
-  "privacy_policy_url": "https://example.com/privacy"
+  "terms_of_use_url": "https://www.notion.so/Terms-of-Use-GigiP2Bot-1cc3fef1a29980d5864bfb00a045833d",
+  "privacy_policy_url": "https://www.notion.so/Terms-of-Use-GigiP2Bot-1cc3fef1a29980d5864bfb00a045833d"
 }
