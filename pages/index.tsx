@@ -9,6 +9,12 @@ export default function Home() {
     const connector = new TonConnect({
       manifestUrl: "https://gigi-ton-connect-v2.onrender.com/tonconnect-manifest.json"
     });
+
+    connector.restoreConnection().then(() => {
+      if (!connector.connected) {
+        connector.connectWallet().catch(console.error);
+      }
+    });
   }, []);
 
   const handleEvmConnect = () => {
@@ -31,15 +37,19 @@ export default function Home() {
         <h1 className="text-3xl sm:text-4xl font-bold mb-8 text-center">
           Connect Your Wallet
         </h1>
-
-        <TonConnectButton />
-
-        <div className="mt-6 flex gap-4">
-          <button onClick={handleEvmConnect} className="bg-purple-600 px-4 py-2 rounded">
-            Connect MetaMask 🟣
+        <div className="space-y-4">
+          <TonConnectButton />
+          <button
+            className="bg-purple-600 px-4 py-2 rounded text-white"
+            onClick={handleEvmConnect}
+          >
+            Connect MetaMask
           </button>
-          <button onClick={handleSolanaConnect} className="bg-yellow-600 px-4 py-2 rounded">
-            Connect Phantom 🟡
+          <button
+            className="bg-blue-600 px-4 py-2 rounded text-white"
+            onClick={handleSolanaConnect}
+          >
+            Connect Phantom
           </button>
         </div>
       </main>
