@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TON Sign</title>
+  <script src="https://unpkg.com/@tonconnect/sdk@latest/dist/tonconnect-sdk.min.js"></script>
+</head>
+<body>
+  <h2>TON Connect Sign Request</h2>
+  <p id="status">Connecting to wallet...</p>
+
+  <script>
+    (async () => {
+      const connector = new TonConnectSDK.TonConnect({
+        manifestUrl: 'https://gigi-ton-connect-v2.onrender.com/tonconnect-manifest.json'
+      });
+
+      await connector.restoreConnection();
+
+      if (!connector.connected) {
+        await connector.connect({
+          universalLink: 'https://t.me/wallet/start',
+          bridgeUrl: 'https://bridge.tonapi.io/bridge'
+        });
+      }
+
+      const params = new URLSearchParams(window.location.search);
+      const amount = params.get('amount');
+      const to = params.get('to');
+
+      if (!amount || !to) {
+        document.getElementById('status').innerText = 'Missing amount or address';
+        return;
+      }
+
+      const tx = {
+        validUntil: Math.floor(Date.now() / 1000) + 300,
+        messages: [{ address: to, amount }]
+      };
+
+      try {
+        const result = await connector.sendTransaction(tx);
+        document.getElementById('status').innerText = '✅ Request sent. Check your wallet.';
+        console.log('Transaction result:', result);
+      } catch (err) {
+        console.error('Signing failed:', err);
+        document.getElementById('status').innerText = '❌ Signing cancelled or failed.';
+      }
+    })();
+  </script>
+</body>
+</html>
