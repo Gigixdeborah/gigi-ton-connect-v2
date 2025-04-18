@@ -1,58 +1,79 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>TON Wallet Sign</title>
-  <script type="module">
-    import { TonConnectUI } from "https://unpkg.com/@tonconnect/ui@latest/dist/tonconnect-ui.min.js";
-
-    const urlParams = new URLSearchParams(window.location.search);
-    const amountNano = urlParams.get("amount");
-    const destinationAddress = urlParams.get("to");
-
-    const tonConnectUI = new TonConnectUI({
-      manifestUrl: "https://gigi-ton-connect-v2-deploy.onrender.com/tonconnect-manifest.json",
-    });
-
-    async function sign() {
-      try {
-        await tonConnectUI.sendTransaction({
-          validUntil: Math.floor(Date.now() / 1000) + 600,
-          messages: [
-            {
-              address: destinationAddress,
-              amount: amountNano,
-            },
-          ],
-        });
-      } catch (error) {
-        console.error("Transaction signing failed:", error);
-        alert("Failed to send transaction.");
-      }
-    }
-
-    window.addEventListener("load", () => {
-      sign();
-    });
-  </script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TON Sign</title>
   <style>
     body {
-      background-color: black;
-      color: white;
-      font-family: monospace;
+      background-color: #000;
+      color: #fff;
+      font-family: 'Segoe UI', sans-serif;
       display: flex;
-      flex-direction: column;
-      align-items: center;
       justify-content: center;
+      align-items: center;
       height: 100vh;
+      text-align: center;
+      flex-direction: column;
     }
-    h1 { font-size: 2em; margin-bottom: 0.5em; }
-    .emoji { font-size: 3em; }
+    .loader {
+      font-size: 1.2rem;
+      color: #00bfff;
+    }
   </style>
 </head>
 <body>
-  <div class="emoji">🪙</div>
-  <h1>Sign TON Transaction</h1>
-  <p>🔗 Preparing transaction...</p>
+  <div class="loader" id="status">🔗 Preparing your transaction...</div>
+
+  <script type="module">
+    import { TonConnectUI } from "https://unpkg.com/@tonconnect/ui@latest";
+
+    const status = document.getElementById("status");
+    const urlParams = new URLSearchParams(window.location.search);
+    const to = urlParams.get("to");
+    const amount = urlParams.get("amount");
+
+    const tonAddressRegex = /^UQ[A-Za-z0-9_-]{46}$/;
+
+    if (!tonAddressRegex.test(to)) {
+      status.textContent = "❌ Invalid TON wallet address format.";
+      return;
+    }
+
+    if (isNaN(amount) || parseFloat(amount) <= 0) {
+      status.textContent = "❌ Amount must be a positive number.";
+      return;
+    }
+
+    const connector = new TonConnectUI({
+      manifestUrl: "https://gigi-ton-connect-v2.onrender.com/tonconnect-manifest.json"
+    });
+
+    async function signTransaction() {
+      try {
+        status.textContent = "🔐 Connecting to wallet...";
+        await connector.restoreConnection();
+
+        if (!connector.connected) {
+          status.textContent = "❌ Wallet not connected. Please connect your wallet.";
+          return;
+        }
+
+        const tx = {
+          validUntil: Math.floor(Date.now() / 1000) + 360,
+          messages: [{ address: to, amount: amount.toString() }]
+        };
+
+        status.textContent = "🚀 Sending transaction...";
+        const result = await connector.sendTransaction(tx);
+        status.textContent = `✅ Transaction sent! Hash: ${result.boc}`;
+      } catch (err) {
+        console.error("Transaction failed:", err);
+        status.textContent = "❌ Transaction failed: " + (err.message || err);
+      }
+    }
+
+    signTransaction();
+  </script>
 </body>
 </html>
